@@ -1,0 +1,10 @@
+{
+  "appTitle": "bragi",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "homePageTitle": "Home",
+  "searchPageTitle": "Search",
+  "libraryPageTitle": "Library",
+  "settingPageTitle": "Setting"
+}

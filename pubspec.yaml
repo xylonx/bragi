@@ -1,0 +1,56 @@
+name: bragi
+description: The client part of Bragi - a cross platform audio player 
+
+# Prevent accidental publishing to pub.dev.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.19.2 <3.0.0"
+
+dependencies:
+  audio_service: ^0.18.9
+  audioplayers: ^3.0.1
+  cached_network_image: ^3.2.3
+  flutter:
+    sdk: flutter
+  flutter_data: ^1.5.8
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.3.2
+  flutter_slidable: ^2.0.0
+  flutter_typeahead: ^4.3.7
+  font_awesome_flutter: ^10.4.0
+  get_it: ^7.2.0
+  grpc: ^3.1.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  infinite_scroll_pagination: ^3.2.0
+  logger: ^1.3.0
+  path_provider: ^2.0.13
+  protobuf: ^2.1.0
+  riverpod_annotation: ^2.0.2
+  salomon_bottom_bar: ^3.3.1
+  shared_preferences: ^2.1.0
+  window_manager: ^0.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+  hive_generator: ^2.0.0
+  build_runner: ^2.3.3
+  riverpod_generator: ^2.1.4
+  riverpod_lint: ^1.1.6
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
