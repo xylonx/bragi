@@ -6,9 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TrackInfoItem extends StatelessWidget {
-  const TrackInfoItem({super.key, required this.info});
+  const TrackInfoItem({super.key, required this.info, required this.height});
 
-  final TrackInfo info;
+  final Track info;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +35,20 @@ class TrackInfoItem extends StatelessWidget {
           print("play music $info instantly");
         },
         child: SizedBox(
-          height: 80,
+          height: height,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: SizedBox(
-                  width: 80,
-                  height: 80,
+                  width: height,
+                  height: height,
                   child: CachedNetworkImage(
                     imageUrl: info.cover.url,
                     imageBuilder: (context, imageProvider) => Container(
-                      width: 80,
-                      height: 80,
+                      width: height,
+                      height: height,
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
@@ -90,9 +91,9 @@ class TrackInfoItem extends StatelessWidget {
                   onPressed: () => showModalBottomSheet(
                     context: context,
                     elevation: 4,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(40),
+                        top: Radius.circular(height / 2),
                       ),
                     ),
                     builder: (context) => TrackInfoModal(

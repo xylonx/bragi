@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ArtistInfoItem extends StatelessWidget {
   const ArtistInfoItem({super.key, required this.artist});
 
-  final UserDetail artist;
+  final ArtistDetail artist;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class ArtistInfoItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  artist.info.name,
+                  artist.artist.name,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
@@ -51,7 +51,7 @@ class ArtistInfoItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: ProviderIcon(provider: artist.info.provider),
+            child: ProviderIcon(provider: artist.artist.provider),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

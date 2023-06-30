@@ -17,9 +17,8 @@ class LibraryPage extends ConsumerStatefulWidget {
 class _LibraryPageState extends ConsumerState<LibraryPage> {
   @override
   Widget build(BuildContext context) {
-    List<UserDetail> artists = ref.watch(persistedArtistProvider);
-    List<TrackCollectionDetail> playlists =
-        ref.watch(persistedPlaylistProvider);
+    List<ArtistDetail> artists = ref.watch(persistedArtistProvider);
+    List<PlaylistDetail> playlists = ref.watch(persistedPlaylistProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,11 +43,11 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                   itemBuilder: (context, index) => ProviderAvatar(
                     radius: 100,
                     url: artists[index].avatar.url,
-                    provider: artists[index].info.provider,
+                    provider: artists[index].artist.provider,
                     text: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: Text(
-                        artists[index].info.name,
+                        artists[index].artist.name,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -71,7 +70,7 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                     width: 100,
                     length: 100,
                     url: artists[index].avatar.url,
-                    provider: artists[index].info.provider,
+                    provider: artists[index].artist.provider,
                   ),
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 22),
@@ -91,7 +90,7 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                     width: 100,
                     length: 100,
                     url: artists[index].avatar.url,
-                    provider: artists[index].info.provider,
+                    provider: artists[index].artist.provider,
                   ),
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 22),

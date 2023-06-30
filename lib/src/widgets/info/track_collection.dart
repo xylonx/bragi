@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TrackCollectionItem extends StatelessWidget {
-  const TrackCollectionItem({super.key, required this.playlist});
+  const TrackCollectionItem(
+      {super.key, required this.playlist, required this.height});
 
-  final TrackCollection playlist;
+  final double height;
+  final Playlist playlist;
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +25,20 @@ class TrackCollectionItem extends StatelessWidget {
         );
       },
       child: SizedBox(
-        height: 80,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: SizedBox(
-                width: 80,
-                height: 80,
+                width: height,
+                height: height,
                 child: CachedNetworkImage(
                   imageUrl: playlist.cover.url,
                   imageBuilder: (context, imageProvider) => Container(
-                    width: 80,
-                    height: 80,
+                    width: height,
+                    height: height,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       image: DecorationImage(
@@ -60,7 +62,7 @@ class TrackCollectionItem extends StatelessWidget {
                   ),
                   // TODO(xylonx): make artist touchable to enable touch to search feature
                   Text(
-                    playlist.authors.map((e) => e.name).join(", "),
+                    playlist.artists.map((e) => e.name).join(", "),
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
@@ -78,9 +80,9 @@ class TrackCollectionItem extends StatelessWidget {
                 onPressed: () => showModalBottomSheet(
                   context: context,
                   elevation: 4,
-                  shape: const RoundedRectangleBorder(
+                  shape: RoundedRectangleBorder(
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(40)),
+                        BorderRadius.vertical(top: Radius.circular(height / 2)),
                   ),
                   builder: (context) => SizedBox(
                     height: 200,

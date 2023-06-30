@@ -21,7 +21,7 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchPageState extends ConsumerState<SearchPage> {
-  final PagingController<int, SearchReplay_SearchItem> _pagingController =
+  final PagingController<int, SearchResponse_SearchItem> _pagingController =
       PagingController(firstPageKey: 1);
 
   String keyword = "";
@@ -48,11 +48,16 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     if (keyword.isEmpty) return;
 
     try {
-      BragiClient? client = ref.watch(bragiClientProvider);
-      SearchReplay? reply = await client?.search(SearchRequest(
+      BragiServiceClient? client = ref.watch(bragiClientProvider);
+      SearchResponse? reply = await client?.search(SearchRequest(
         providers: [BragiEnum.Provider.PROVIDER_BILIBILI],
         keyword: keyword,
         page: page,
+          fields: [
+            BragiEnum.Zone.ZONE_ARTIST,
+            BragiEnum.Zone.ZONE_PLAYLIST,
+            BragiEnum.Zone.ZONE_TRACK
+          ]
       ));
       _pagingController.appendPage(reply?.items ?? [], page + 1);
     } catch (err) {
@@ -60,23 +65,18 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     }
   }
 
-  Widget itemBuilder(SearchReplay_SearchItem item) {
+  Widget itemBuilder(SearchResponse_SearchItem item) {
     switch (item.whichItem()) {
-      case SearchReplay_SearchItem_Item.track:
-        return TrackInfoItem(info: item.ensureTrack());
-      case SearchReplay_SearchItem_Item.user:
+      case SearchResponse_SearchItem_Item.track:
+        return TrackInfoItem(info: item.ensureTrack(), height: 80);
+      case SearchResponse_SearchItem_Item.user:
         return ArtistInfoItem(artist: item.ensureUser());
-      case SearchReplay_SearchItem_Item.playlist:
-        return TrackCollectionItem(playlist: item.ensurePlaylist());
-
-      // TODO: Handle this case.
-      case SearchReplay_SearchItem_Item.album:
-      case SearchReplay_SearchItem_Item.notSet:
+      case SearchResponse_SearchItem_Item.playlist:
+        return TrackCollectionItem(playlist: item.ensurePlaylist(), height: 80);
+      case SearchResponse_SearchItem_Item.notSet:
         return const SizedBox(height: 80);
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           ),
           if (keyword.isNotEmpty)
             Expanded(
-              child: PagedListView<int, SearchReplay_SearchItem>(
+              child: PagedListView<int, SearchResponse_SearchItem>(
                 scrollDirection: Axis.vertical,
                 // shrinkWrap: true,
                 pagingController: _pagingController,

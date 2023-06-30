@@ -1,16 +1,15 @@
 import 'package:bragi/src/services/proto/bragi/bragi.pbgrpc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BragiClientNotifer extends StateNotifier<BragiClient?> {
-  BragiClientNotifer(BragiClient? client) : super(client);
+class BragiClientNotifer extends StateNotifier<BragiServiceClient?> {
+  BragiClientNotifer(BragiServiceClient? client) : super(client);
 
-  void changeBragiClient(BragiClient client) {
+  void changeBragiClient(BragiServiceClient client) {
     state = client;
-    
   }
 }
 
 final bragiClientProvider =
-    StateNotifierProvider<BragiClientNotifer, BragiClient?>(
+    StateNotifierProvider<BragiClientNotifer, BragiServiceClient?>(
   (ref) => BragiClientNotifer(null),
 );

@@ -1,10 +1,9 @@
 import 'package:bragi/src/services/proto/bragi/bragi.pb.dart' as bragi;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:protobuf/protobuf.dart';
 
 class PersistPlaylistNotifier
-    extends StateNotifier<List<bragi.TrackCollectionDetail>> {
+    extends StateNotifier<List<bragi.PlaylistDetail>> {
   PersistPlaylistNotifier() : super([]);
 
   // TODO(xylonx): persist by hive
@@ -13,7 +12,7 @@ class PersistPlaylistNotifier
     // Hive.box("playlist").put(id, );
   }
 
-  void addTrackToPlaylist(String playlistID, bragi.TrackInfo track) {
+  void addTrackToPlaylist(String playlistID, bragi.Track track) {
     state = [
       for (final playlist in state)
         if (playlist.id != playlistID)
@@ -25,7 +24,7 @@ class PersistPlaylistNotifier
     ];
   }
 
-  void addPlaylist(bragi.TrackCollectionDetail playlist) {
+  void addPlaylist(bragi.PlaylistDetail playlist) {
     state = [playlist, ...state];
   }
 
@@ -37,16 +36,16 @@ class PersistPlaylistNotifier
   }
 }
 
-final persistedPlaylistProvider = StateNotifierProvider<PersistPlaylistNotifier,
-    List<bragi.TrackCollectionDetail>>(
+final persistedPlaylistProvider =
+    StateNotifierProvider<PersistPlaylistNotifier, List<bragi.PlaylistDetail>>(
   (ref) => PersistPlaylistNotifier(),
 );
 
-class PersistArtistNotifier extends StateNotifier<List<bragi.UserDetail>> {
+class PersistArtistNotifier extends StateNotifier<List<bragi.ArtistDetail>> {
   PersistArtistNotifier()
       : super([
-          bragi.UserDetail(
-            info: bragi.UserInfo(
+          bragi.ArtistDetail(
+            artist: bragi.Artist(
               id: "11",
               provider: bragi.Provider.PROVIDER_BILIBILI,
               name: "Akie",
@@ -56,8 +55,8 @@ class PersistArtistNotifier extends StateNotifier<List<bragi.UserDetail>> {
                 url:
                     "https://i1.hdslb.com/bfs/face/59c22c4472089f5019a47511c1f755de08b38f8f.jpg"),
           ),
-          bragi.UserDetail(
-            info: bragi.UserInfo(
+          bragi.ArtistDetail(
+            artist: bragi.Artist(
               id: "11",
               provider: bragi.Provider.PROVIDER_BILIBILI,
               name: "Akie",
@@ -71,14 +70,14 @@ class PersistArtistNotifier extends StateNotifier<List<bragi.UserDetail>> {
 }
 
 final persistedArtistProvider =
-    StateNotifierProvider<PersistArtistNotifier, List<bragi.UserDetail>>(
+    StateNotifierProvider<PersistArtistNotifier, List<bragi.ArtistDetail>>(
   (ref) => PersistArtistNotifier(),
 );
 
-class PersistedAlbumNotifier
-    extends StateNotifier<List<bragi.TrackCollectionDetail>> {
+class PersistedAlbumNotifier extends StateNotifier<List<bragi.PlaylistDetail>> {
   PersistedAlbumNotifier() : super([]);
 }
 
-final persistedAlbumProvider = StateNotifierProvider<PersistedAlbumNotifier,
-    List<bragi.TrackCollectionDetail>>((ref) => PersistedAlbumNotifier());
+final persistedAlbumProvider =
+    StateNotifierProvider<PersistedAlbumNotifier, List<bragi.PlaylistDetail>>(
+        (ref) => PersistedAlbumNotifier());

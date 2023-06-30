@@ -20,12 +20,12 @@ class SearchBar extends ConsumerWidget {
 
   final TextEditingController textEditingController = TextEditingController();
 
-  Future<List<SuggestReplay_Suggestion>> handleTextChange(
+  Future<List<SuggestResponse_Suggestion>> handleTextChange(
     String query,
-    BragiClient? client,
+    BragiServiceClient? client,
   ) async {
     // TODO(xylonx): Maybe decouple suggest call to a single service to support local
-    SuggestReplay? resp = await client?.suggest(SuggestRequest(
+    SuggestResponse? resp = await client?.suggest(SuggestRequest(
       providers: [BragiEnum.Provider.PROVIDER_BILIBILI],
       keyword: query,
     ));
@@ -39,7 +39,7 @@ class SearchBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    BragiClient? client = ref.watch(bragiClientProvider);
+    BragiServiceClient? client = ref.watch(bragiClientProvider);
     return TypeAheadFormField(
       debounceDuration: _debounceDuration,
       textFieldConfiguration: TextFieldConfiguration(

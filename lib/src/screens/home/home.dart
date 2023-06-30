@@ -62,17 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: pageController,
         onPageChanged: (index) => handlePageChange(index),
         children: const [
-          RecommendationPage(),
-          SearchPage(),
-          LibraryPage(),
-          SettingPage(),
+          SafeArea(child: RecommendationPage()),
+          SafeArea(child: SearchPage()),
+          SafeArea(child: LibraryPage()),
+          SafeArea(child: SettingPage()),
         ],
       ),
-      bottomNavigationBar:
-          // kIsDesktop
-          // ? null
-          // :
-          SafeArea(
+      bottomNavigationBar: SafeArea(
         child: AnimatedContainer(
           duration: const Duration(microseconds: 100),
           height: 60,

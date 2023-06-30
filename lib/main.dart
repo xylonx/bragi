@@ -1,15 +1,18 @@
-import 'package:bragi/src/app.dart';
-import 'package:bragi/src/providers/bragi.dart';
-import 'package:bragi/src/services/mobile_audio_service.dart';
-import 'package:bragi/src/services/proto/bragi/bragi.pbgrpc.dart';
-import 'package:bragi/src/settings/settings_controller.dart';
-import 'package:bragi/src/settings/settings_service.dart';
-import 'package:bragi/src/utils/platform.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'src/app.dart';
+import 'src/providers/bragi.dart';
+import 'src/services/audio/mobile_audio_service.dart';
+import 'src/services/proto/bragi/bragi.pbgrpc.dart';
+import 'src/settings/settings_controller.dart';
+import 'src/settings/settings_service.dart';
+import 'src/utils/platform.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +39,17 @@ void main() async {
     });
   }
 
-  MobileAudioService? mobileAudioService;
+  var audioHandler = await AudioService.init(
+    builder: () => MyAudioHandler(),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.xylonx.bragi.channel.audio',
+      androidNotificationChannelName: 'Music playback',
+    ),
+  );
+  print("register audio handler");
+  GetIt.I.registerSingleton<MyAudioHandler>(audioHandler);
+
+  // MobileAudioService? mobileAudioService;
 
   // init singleton grpc client
   // TODO(xylonx): listen settings change and override the client
@@ -66,12 +79,13 @@ void main() async {
     overrides: [
       bragiClientProvider.overrideWith(
         (ref) => BragiClientNotifer(
-          BragiClient(
+          BragiServiceClient(
             ClientChannel(
               "localhost",
               port: 6000,
               options: const ChannelOptions(
-                  credentials: ChannelCredentials.insecure()),
+                credentials: ChannelCredentials.insecure(),
+              ),
             ),
           ),
         ),

@@ -1,14 +1,11 @@
-import 'package:bragi/src/screens/detail/artist.dart';
-import 'package:bragi/src/screens/detail/playlist.dart';
-import 'package:bragi/src/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
+import 'screens/detail/playlist.dart';
+import 'screens/home/home.dart';
 import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -70,16 +67,16 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
-                  case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
+                  // case SettingsView.routeName:
+                  //   return SettingsView(controller: settingsController);
+                  // case SampleItemDetailsView.routeName:
+                  //   return const SampleItemDetailsView();
                   case SampleItemListView.routeName: // "/"
                     return const HomeScreen();
                   case PlaylistDetailScreen.routeName: // "/detail/playlist"
                     return const PlaylistDetailScreen();
-                  case ArtistDetailScreen.routeName: // "/detail/artist"
-                    return const ArtistDetailScreen();
+                  // case ArtistDetailScreen.routeName: // "/detail/artist"
+                  // return const ArtistDetailScreen();
                   // case PlaylistDetailScreen.routeName:
                   default:
                     return const SampleItemListView();
