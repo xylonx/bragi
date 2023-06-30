@@ -30,24 +30,22 @@ class Provider extends $pb.ProtobufEnum {
   const Provider._($core.int v, $core.String n) : super(v, n);
 }
 
-class SearchZone extends $pb.ProtobufEnum {
-  static const SearchZone SEARCH_ZONE_UNSPECIFIED = SearchZone._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SEARCH_ZONE_UNSPECIFIED');
-  static const SearchZone SEARCH_ZONE_TRACK = SearchZone._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SEARCH_ZONE_TRACK');
-  static const SearchZone SEARCH_ZONE_ARTIST = SearchZone._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SEARCH_ZONE_ARTIST');
-  static const SearchZone SEARCH_ZONE_ALBUM = SearchZone._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SEARCH_ZONE_ALBUM');
-  static const SearchZone SEARCH_ZONE_PLAYLIST = SearchZone._(4, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SEARCH_ZONE_PLAYLIST');
+class Zone extends $pb.ProtobufEnum {
+  static const Zone ZONE_UNSPECIFIED = Zone._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ZONE_UNSPECIFIED');
+  static const Zone ZONE_TRACK = Zone._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ZONE_TRACK');
+  static const Zone ZONE_ARTIST = Zone._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ZONE_ARTIST');
+  static const Zone ZONE_PLAYLIST = Zone._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ZONE_PLAYLIST');
 
-  static const $core.List<SearchZone> values = <SearchZone> [
-    SEARCH_ZONE_UNSPECIFIED,
-    SEARCH_ZONE_TRACK,
-    SEARCH_ZONE_ARTIST,
-    SEARCH_ZONE_ALBUM,
-    SEARCH_ZONE_PLAYLIST,
+  static const $core.List<Zone> values = <Zone> [
+    ZONE_UNSPECIFIED,
+    ZONE_TRACK,
+    ZONE_ARTIST,
+    ZONE_PLAYLIST,
   ];
 
-  static final $core.Map<$core.int, SearchZone> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static SearchZone? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, Zone> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Zone? valueOf($core.int value) => _byValue[value];
 
-  const SearchZone._($core.int v, $core.String n) : super(v, n);
+  const Zone._($core.int v, $core.String n) : super(v, n);
 }
 

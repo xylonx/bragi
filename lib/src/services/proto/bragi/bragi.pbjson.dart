@@ -22,20 +22,19 @@ const Provider$json = const {
 
 /// Descriptor for `Provider`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List providerDescriptor = $convert.base64Decode('CghQcm92aWRlchIYChRQUk9WSURFUl9VTlNQRUNJRklFRBAAEhQKEFBST1ZJREVSX1NQT1RJRlkQARIaChZQUk9WSURFUl9ORVRFQVNFX01VU0lDEAISFAoQUFJPVklERVJfWU9VVFVCRRADEhUKEVBST1ZJREVSX0JJTElCSUxJEAQ=');
-@$core.Deprecated('Use searchZoneDescriptor instead')
-const SearchZone$json = const {
-  '1': 'SearchZone',
+@$core.Deprecated('Use zoneDescriptor instead')
+const Zone$json = const {
+  '1': 'Zone',
   '2': const [
-    const {'1': 'SEARCH_ZONE_UNSPECIFIED', '2': 0},
-    const {'1': 'SEARCH_ZONE_TRACK', '2': 1},
-    const {'1': 'SEARCH_ZONE_ARTIST', '2': 2},
-    const {'1': 'SEARCH_ZONE_ALBUM', '2': 3},
-    const {'1': 'SEARCH_ZONE_PLAYLIST', '2': 4},
+    const {'1': 'ZONE_UNSPECIFIED', '2': 0},
+    const {'1': 'ZONE_TRACK', '2': 1},
+    const {'1': 'ZONE_ARTIST', '2': 2},
+    const {'1': 'ZONE_PLAYLIST', '2': 3},
   ],
 };
 
-/// Descriptor for `SearchZone`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List searchZoneDescriptor = $convert.base64Decode('CgpTZWFyY2hab25lEhsKF1NFQVJDSF9aT05FX1VOU1BFQ0lGSUVEEAASFQoRU0VBUkNIX1pPTkVfVFJBQ0sQARIWChJTRUFSQ0hfWk9ORV9BUlRJU1QQAhIVChFTRUFSQ0hfWk9ORV9BTEJVTRADEhgKFFNFQVJDSF9aT05FX1BMQVlMSVNUEAQ=');
+/// Descriptor for `Zone`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List zoneDescriptor = $convert.base64Decode('CgRab25lEhQKEFpPTkVfVU5TUEVDSUZJRUQQABIOCgpaT05FX1RSQUNLEAESDwoLWk9ORV9BUlRJU1QQAhIRCg1aT05FX1BMQVlMSVNUEAM=');
 @$core.Deprecated('Use imageDescriptor instead')
 const Image$json = const {
   '1': 'Image',
@@ -52,22 +51,9 @@ const Image$json = const {
 
 /// Descriptor for `Image`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List imageDescriptor = $convert.base64Decode('CgVJbWFnZRIQCgN1cmwYASABKAlSA3VybBIZCgV3aWR0aBgCIAEoA0gAUgV3aWR0aIgBARIbCgZsZW5ndGgYAyABKANIAVIGbGVuZ3RoiAEBQggKBl93aWR0aEIJCgdfbGVuZ3Ro');
-@$core.Deprecated('Use streamDescriptor instead')
-const Stream$json = const {
-  '1': 'Stream',
-  '2': const [
-    const {'1': 'provider', '3': 1, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
-    const {'1': 'quality', '3': 2, '4': 1, '5': 9, '10': 'quality'},
-    const {'1': 'base_url', '3': 3, '4': 1, '5': 9, '10': 'baseUrl'},
-    const {'1': 'backup_url', '3': 4, '4': 3, '5': 9, '10': 'backupUrl'},
-  ],
-};
-
-/// Descriptor for `Stream`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List streamDescriptor = $convert.base64Decode('CgZTdHJlYW0SKwoIcHJvdmlkZXIYASABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISGAoHcXVhbGl0eRgCIAEoCVIHcXVhbGl0eRIZCghiYXNlX3VybBgDIAEoCVIHYmFzZVVybBIdCgpiYWNrdXBfdXJsGAQgAygJUgliYWNrdXBVcmw=');
-@$core.Deprecated('Use userInfoDescriptor instead')
-const UserInfo$json = const {
-  '1': 'UserInfo',
+@$core.Deprecated('Use artistDescriptor instead')
+const Artist$json = const {
+  '1': 'Artist',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'provider', '3': 2, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
@@ -75,13 +61,13 @@ const UserInfo$json = const {
   ],
 };
 
-/// Descriptor for `UserInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userInfoDescriptor = $convert.base64Decode('CghVc2VySW5mbxIOCgJpZBgBIAEoCVICaWQSKwoIcHJvdmlkZXIYAiABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISEgoEbmFtZRgDIAEoCVIEbmFtZQ==');
-@$core.Deprecated('Use userDetailDescriptor instead')
-const UserDetail$json = const {
-  '1': 'UserDetail',
+/// Descriptor for `Artist`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List artistDescriptor = $convert.base64Decode('CgZBcnRpc3QSDgoCaWQYASABKAlSAmlkEisKCHByb3ZpZGVyGAIgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEhIKBG5hbWUYAyABKAlSBG5hbWU=');
+@$core.Deprecated('Use artistDetailDescriptor instead')
+const ArtistDetail$json = const {
+  '1': 'ArtistDetail',
   '2': const [
-    const {'1': 'info', '3': 1, '4': 1, '5': 11, '6': '.bragi.UserInfo', '10': 'info'},
+    const {'1': 'artist', '3': 1, '4': 1, '5': 11, '6': '.bragi.Artist', '10': 'artist'},
     const {'1': 'description', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
     const {'1': 'avatar', '3': 3, '4': 1, '5': 11, '6': '.bragi.Image', '10': 'avatar'},
   ],
@@ -90,55 +76,67 @@ const UserDetail$json = const {
   ],
 };
 
-/// Descriptor for `UserDetail`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userDetailDescriptor = $convert.base64Decode('CgpVc2VyRGV0YWlsEiMKBGluZm8YASABKAsyDy5icmFnaS5Vc2VySW5mb1IEaW5mbxIlCgtkZXNjcmlwdGlvbhgCIAEoCUgAUgtkZXNjcmlwdGlvbogBARIkCgZhdmF0YXIYAyABKAsyDC5icmFnaS5JbWFnZVIGYXZhdGFyQg4KDF9kZXNjcmlwdGlvbg==');
-@$core.Deprecated('Use trackInfoDescriptor instead')
-const TrackInfo$json = const {
-  '1': 'TrackInfo',
+/// Descriptor for `ArtistDetail`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List artistDetailDescriptor = $convert.base64Decode('CgxBcnRpc3REZXRhaWwSJQoGYXJ0aXN0GAEgASgLMg0uYnJhZ2kuQXJ0aXN0UgZhcnRpc3QSJQoLZGVzY3JpcHRpb24YAiABKAlIAFILZGVzY3JpcHRpb26IAQESJAoGYXZhdGFyGAMgASgLMgwuYnJhZ2kuSW1hZ2VSBmF2YXRhckIOCgxfZGVzY3JpcHRpb24=');
+@$core.Deprecated('Use trackDescriptor instead')
+const Track$json = const {
+  '1': 'Track',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'provider', '3': 2, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
     const {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'artists', '3': 4, '4': 3, '5': 11, '6': '.bragi.UserInfo', '10': 'artists'},
+    const {'1': 'artists', '3': 4, '4': 3, '5': 11, '6': '.bragi.Artist', '10': 'artists'},
     const {'1': 'cover', '3': 5, '4': 1, '5': 11, '6': '.bragi.Image', '10': 'cover'},
   ],
 };
 
-/// Descriptor for `TrackInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List trackInfoDescriptor = $convert.base64Decode('CglUcmFja0luZm8SDgoCaWQYASABKAlSAmlkEisKCHByb3ZpZGVyGAIgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEhIKBG5hbWUYAyABKAlSBG5hbWUSKQoHYXJ0aXN0cxgEIAMoCzIPLmJyYWdpLlVzZXJJbmZvUgdhcnRpc3RzEiIKBWNvdmVyGAUgASgLMgwuYnJhZ2kuSW1hZ2VSBWNvdmVy');
-@$core.Deprecated('Use trackCollectionDescriptor instead')
-const TrackCollection$json = const {
-  '1': 'TrackCollection',
+/// Descriptor for `Track`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List trackDescriptor = $convert.base64Decode('CgVUcmFjaxIOCgJpZBgBIAEoCVICaWQSKwoIcHJvdmlkZXIYAiABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISEgoEbmFtZRgDIAEoCVIEbmFtZRInCgdhcnRpc3RzGAQgAygLMg0uYnJhZ2kuQXJ0aXN0UgdhcnRpc3RzEiIKBWNvdmVyGAUgASgLMgwuYnJhZ2kuSW1hZ2VSBWNvdmVy');
+@$core.Deprecated('Use playlistDescriptor instead')
+const Playlist$json = const {
+  '1': 'Playlist',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'provider', '3': 2, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
     const {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'authors', '3': 4, '4': 3, '5': 11, '6': '.bragi.UserInfo', '10': 'authors'},
+    const {'1': 'artists', '3': 4, '4': 3, '5': 11, '6': '.bragi.Artist', '10': 'artists'},
     const {'1': 'cover', '3': 5, '4': 1, '5': 11, '6': '.bragi.Image', '10': 'cover'},
   ],
 };
 
-/// Descriptor for `TrackCollection`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List trackCollectionDescriptor = $convert.base64Decode('Cg9UcmFja0NvbGxlY3Rpb24SDgoCaWQYASABKAlSAmlkEisKCHByb3ZpZGVyGAIgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEhIKBG5hbWUYAyABKAlSBG5hbWUSKQoHYXV0aG9ycxgEIAMoCzIPLmJyYWdpLlVzZXJJbmZvUgdhdXRob3JzEiIKBWNvdmVyGAUgASgLMgwuYnJhZ2kuSW1hZ2VSBWNvdmVy');
-@$core.Deprecated('Use trackCollectionDetailDescriptor instead')
-const TrackCollectionDetail$json = const {
-  '1': 'TrackCollectionDetail',
+/// Descriptor for `Playlist`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List playlistDescriptor = $convert.base64Decode('CghQbGF5bGlzdBIOCgJpZBgBIAEoCVICaWQSKwoIcHJvdmlkZXIYAiABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISEgoEbmFtZRgDIAEoCVIEbmFtZRInCgdhcnRpc3RzGAQgAygLMg0uYnJhZ2kuQXJ0aXN0UgdhcnRpc3RzEiIKBWNvdmVyGAUgASgLMgwuYnJhZ2kuSW1hZ2VSBWNvdmVy');
+@$core.Deprecated('Use playlistDetailDescriptor instead')
+const PlaylistDetail$json = const {
+  '1': 'PlaylistDetail',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'provider', '3': 2, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
     const {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'authors', '3': 4, '4': 3, '5': 11, '6': '.bragi.UserDetail', '10': 'authors'},
+    const {'1': 'artists', '3': 4, '4': 3, '5': 11, '6': '.bragi.ArtistDetail', '10': 'artists'},
     const {'1': 'cover', '3': 5, '4': 1, '5': 11, '6': '.bragi.Image', '10': 'cover'},
-    const {'1': 'tracks', '3': 6, '4': 3, '5': 11, '6': '.bragi.TrackInfo', '10': 'tracks'},
-    const {'1': 'description', '3': 7, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    const {'1': 'description', '3': 6, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    const {'1': 'tracks', '3': 7, '4': 3, '5': 11, '6': '.bragi.Track', '10': 'tracks'},
   ],
   '8': const [
     const {'1': '_description'},
   ],
 };
 
-/// Descriptor for `TrackCollectionDetail`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List trackCollectionDetailDescriptor = $convert.base64Decode('ChVUcmFja0NvbGxlY3Rpb25EZXRhaWwSDgoCaWQYASABKAlSAmlkEisKCHByb3ZpZGVyGAIgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEhIKBG5hbWUYAyABKAlSBG5hbWUSKwoHYXV0aG9ycxgEIAMoCzIRLmJyYWdpLlVzZXJEZXRhaWxSB2F1dGhvcnMSIgoFY292ZXIYBSABKAsyDC5icmFnaS5JbWFnZVIFY292ZXISKAoGdHJhY2tzGAYgAygLMhAuYnJhZ2kuVHJhY2tJbmZvUgZ0cmFja3MSJQoLZGVzY3JpcHRpb24YByABKAlIAFILZGVzY3JpcHRpb26IAQFCDgoMX2Rlc2NyaXB0aW9u');
+/// Descriptor for `PlaylistDetail`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List playlistDetailDescriptor = $convert.base64Decode('Cg5QbGF5bGlzdERldGFpbBIOCgJpZBgBIAEoCVICaWQSKwoIcHJvdmlkZXIYAiABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISEgoEbmFtZRgDIAEoCVIEbmFtZRItCgdhcnRpc3RzGAQgAygLMhMuYnJhZ2kuQXJ0aXN0RGV0YWlsUgdhcnRpc3RzEiIKBWNvdmVyGAUgASgLMgwuYnJhZ2kuSW1hZ2VSBWNvdmVyEiUKC2Rlc2NyaXB0aW9uGAYgASgJSABSC2Rlc2NyaXB0aW9uiAEBEiQKBnRyYWNrcxgHIAMoCzIMLmJyYWdpLlRyYWNrUgZ0cmFja3NCDgoMX2Rlc2NyaXB0aW9u');
+@$core.Deprecated('Use streamDescriptor instead')
+const Stream$json = const {
+  '1': 'Stream',
+  '2': const [
+    const {'1': 'provider', '3': 1, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
+    const {'1': 'quality', '3': 2, '4': 1, '5': 9, '10': 'quality'},
+    const {'1': 'url', '3': 3, '4': 1, '5': 9, '10': 'url'},
+  ],
+};
+
+/// Descriptor for `Stream`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List streamDescriptor = $convert.base64Decode('CgZTdHJlYW0SKwoIcHJvdmlkZXIYASABKA4yDy5icmFnaS5Qcm92aWRlclIIcHJvdmlkZXISGAoHcXVhbGl0eRgCIAEoCVIHcXVhbGl0eRIQCgN1cmwYAyABKAlSA3VybA==');
 @$core.Deprecated('Use suggestRequestDescriptor instead')
 const SuggestRequest$json = const {
   '1': 'SuggestRequest',
@@ -150,17 +148,17 @@ const SuggestRequest$json = const {
 
 /// Descriptor for `SuggestRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List suggestRequestDescriptor = $convert.base64Decode('Cg5TdWdnZXN0UmVxdWVzdBItCglwcm92aWRlcnMYASADKA4yDy5icmFnaS5Qcm92aWRlclIJcHJvdmlkZXJzEhgKB2tleXdvcmQYAiABKAlSB2tleXdvcmQ=');
-@$core.Deprecated('Use suggestReplayDescriptor instead')
-const SuggestReplay$json = const {
-  '1': 'SuggestReplay',
+@$core.Deprecated('Use suggestResponseDescriptor instead')
+const SuggestResponse$json = const {
+  '1': 'SuggestResponse',
   '2': const [
-    const {'1': 'suggestions', '3': 1, '4': 3, '5': 11, '6': '.bragi.SuggestReplay.Suggestion', '10': 'suggestions'},
+    const {'1': 'suggestions', '3': 1, '4': 3, '5': 11, '6': '.bragi.SuggestResponse.Suggestion', '10': 'suggestions'},
   ],
-  '3': const [SuggestReplay_Suggestion$json],
+  '3': const [SuggestResponse_Suggestion$json],
 };
 
-@$core.Deprecated('Use suggestReplayDescriptor instead')
-const SuggestReplay_Suggestion$json = const {
+@$core.Deprecated('Use suggestResponseDescriptor instead')
+const SuggestResponse_Suggestion$json = const {
   '1': 'Suggestion',
   '2': const [
     const {'1': 'provider', '3': 1, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
@@ -168,8 +166,8 @@ const SuggestReplay_Suggestion$json = const {
   ],
 };
 
-/// Descriptor for `SuggestReplay`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List suggestReplayDescriptor = $convert.base64Decode('Cg1TdWdnZXN0UmVwbGF5EkEKC3N1Z2dlc3Rpb25zGAEgAygLMh8uYnJhZ2kuU3VnZ2VzdFJlcGxheS5TdWdnZXN0aW9uUgtzdWdnZXN0aW9ucxpZCgpTdWdnZXN0aW9uEisKCHByb3ZpZGVyGAEgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEh4KCnN1Z2dlc3Rpb24YAiABKAlSCnN1Z2dlc3Rpb24=');
+/// Descriptor for `SuggestResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List suggestResponseDescriptor = $convert.base64Decode('Cg9TdWdnZXN0UmVzcG9uc2USQwoLc3VnZ2VzdGlvbnMYASADKAsyIS5icmFnaS5TdWdnZXN0UmVzcG9uc2UuU3VnZ2VzdGlvblILc3VnZ2VzdGlvbnMaWQoKU3VnZ2VzdGlvbhIrCghwcm92aWRlchgBIAEoDjIPLmJyYWdpLlByb3ZpZGVyUghwcm92aWRlchIeCgpzdWdnZXN0aW9uGAIgASgJUgpzdWdnZXN0aW9u');
 @$core.Deprecated('Use searchRequestDescriptor instead')
 const SearchRequest$json = const {
   '1': 'SearchRequest',
@@ -177,65 +175,71 @@ const SearchRequest$json = const {
     const {'1': 'providers', '3': 1, '4': 3, '5': 14, '6': '.bragi.Provider', '10': 'providers'},
     const {'1': 'keyword', '3': 2, '4': 1, '5': 9, '10': 'keyword'},
     const {'1': 'page', '3': 3, '4': 1, '5': 5, '10': 'page'},
-    const {'1': 'fields', '3': 4, '4': 3, '5': 14, '6': '.bragi.SearchZone', '10': 'fields'},
+    const {'1': 'fields', '3': 4, '4': 3, '5': 14, '6': '.bragi.Zone', '10': 'fields'},
   ],
 };
 
 /// Descriptor for `SearchRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List searchRequestDescriptor = $convert.base64Decode('Cg1TZWFyY2hSZXF1ZXN0Ei0KCXByb3ZpZGVycxgBIAMoDjIPLmJyYWdpLlByb3ZpZGVyUglwcm92aWRlcnMSGAoHa2V5d29yZBgCIAEoCVIHa2V5d29yZBISCgRwYWdlGAMgASgFUgRwYWdlEikKBmZpZWxkcxgEIAMoDjIRLmJyYWdpLlNlYXJjaFpvbmVSBmZpZWxkcw==');
-@$core.Deprecated('Use searchReplayDescriptor instead')
-const SearchReplay$json = const {
-  '1': 'SearchReplay',
+final $typed_data.Uint8List searchRequestDescriptor = $convert.base64Decode('Cg1TZWFyY2hSZXF1ZXN0Ei0KCXByb3ZpZGVycxgBIAMoDjIPLmJyYWdpLlByb3ZpZGVyUglwcm92aWRlcnMSGAoHa2V5d29yZBgCIAEoCVIHa2V5d29yZBISCgRwYWdlGAMgASgFUgRwYWdlEiMKBmZpZWxkcxgEIAMoDjILLmJyYWdpLlpvbmVSBmZpZWxkcw==');
+@$core.Deprecated('Use searchResponseDescriptor instead')
+const SearchResponse$json = const {
+  '1': 'SearchResponse',
   '2': const [
-    const {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.bragi.SearchReplay.SearchItem', '10': 'items'},
+    const {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.bragi.SearchResponse.SearchItem', '10': 'items'},
   ],
-  '3': const [SearchReplay_SearchItem$json],
+  '3': const [SearchResponse_SearchItem$json],
 };
 
-@$core.Deprecated('Use searchReplayDescriptor instead')
-const SearchReplay_SearchItem$json = const {
+@$core.Deprecated('Use searchResponseDescriptor instead')
+const SearchResponse_SearchItem$json = const {
   '1': 'SearchItem',
   '2': const [
-    const {'1': 'track', '3': 1, '4': 1, '5': 11, '6': '.bragi.TrackInfo', '9': 0, '10': 'track'},
-    const {'1': 'user', '3': 2, '4': 1, '5': 11, '6': '.bragi.UserDetail', '9': 0, '10': 'user'},
-    const {'1': 'album', '3': 3, '4': 1, '5': 11, '6': '.bragi.TrackCollection', '9': 0, '10': 'album'},
-    const {'1': 'playlist', '3': 4, '4': 1, '5': 11, '6': '.bragi.TrackCollection', '9': 0, '10': 'playlist'},
+    const {'1': 'track', '3': 1, '4': 1, '5': 11, '6': '.bragi.Track', '9': 0, '10': 'track'},
+    const {'1': 'user', '3': 2, '4': 1, '5': 11, '6': '.bragi.ArtistDetail', '9': 0, '10': 'user'},
+    const {'1': 'playlist', '3': 3, '4': 1, '5': 11, '6': '.bragi.Playlist', '9': 0, '10': 'playlist'},
   ],
   '8': const [
-    const {'1': 'Item'},
+    const {'1': 'item'},
   ],
 };
 
-/// Descriptor for `SearchReplay`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List searchReplayDescriptor = $convert.base64Decode('CgxTZWFyY2hSZXBsYXkSNAoFaXRlbXMYASADKAsyHi5icmFnaS5TZWFyY2hSZXBsYXkuU2VhcmNoSXRlbVIFaXRlbXMazQEKClNlYXJjaEl0ZW0SKAoFdHJhY2sYASABKAsyEC5icmFnaS5UcmFja0luZm9IAFIFdHJhY2sSJwoEdXNlchgCIAEoCzIRLmJyYWdpLlVzZXJEZXRhaWxIAFIEdXNlchIuCgVhbGJ1bRgDIAEoCzIWLmJyYWdpLlRyYWNrQ29sbGVjdGlvbkgAUgVhbGJ1bRI0CghwbGF5bGlzdBgEIAEoCzIWLmJyYWdpLlRyYWNrQ29sbGVjdGlvbkgAUghwbGF5bGlzdEIGCgRJdGVt');
+/// Descriptor for `SearchResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List searchResponseDescriptor = $convert.base64Decode('Cg5TZWFyY2hSZXNwb25zZRI2CgVpdGVtcxgBIAMoCzIgLmJyYWdpLlNlYXJjaFJlc3BvbnNlLlNlYXJjaEl0ZW1SBWl0ZW1zGpQBCgpTZWFyY2hJdGVtEiQKBXRyYWNrGAEgASgLMgwuYnJhZ2kuVHJhY2tIAFIFdHJhY2sSKQoEdXNlchgCIAEoCzITLmJyYWdpLkFydGlzdERldGFpbEgAUgR1c2VyEi0KCHBsYXlsaXN0GAMgASgLMg8uYnJhZ2kuUGxheWxpc3RIAFIIcGxheWxpc3RCBgoEaXRlbQ==');
 @$core.Deprecated('Use detailRequestDescriptor instead')
 const DetailRequest$json = const {
   '1': 'DetailRequest',
   '2': const [
     const {'1': 'provider', '3': 1, '4': 1, '5': 14, '6': '.bragi.Provider', '10': 'provider'},
-    const {'1': 'zone', '3': 2, '4': 1, '5': 14, '6': '.bragi.SearchZone', '10': 'zone'},
+    const {'1': 'zone', '3': 2, '4': 1, '5': 14, '6': '.bragi.Zone', '10': 'zone'},
     const {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'page', '3': 4, '4': 1, '5': 5, '10': 'page'},
   ],
 };
 
 /// Descriptor for `DetailRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List detailRequestDescriptor = $convert.base64Decode('Cg1EZXRhaWxSZXF1ZXN0EisKCHByb3ZpZGVyGAEgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEiUKBHpvbmUYAiABKA4yES5icmFnaS5TZWFyY2hab25lUgR6b25lEg4KAmlkGAMgASgJUgJpZA==');
-@$core.Deprecated('Use detailReplayDescriptor instead')
-const DetailReplay$json = const {
-  '1': 'DetailReplay',
+final $typed_data.Uint8List detailRequestDescriptor = $convert.base64Decode('Cg1EZXRhaWxSZXF1ZXN0EisKCHByb3ZpZGVyGAEgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEh8KBHpvbmUYAiABKA4yCy5icmFnaS5ab25lUgR6b25lEg4KAmlkGAMgASgJUgJpZBISCgRwYWdlGAQgASgFUgRwYWdl');
+@$core.Deprecated('Use detailResponseDescriptor instead')
+const DetailResponse$json = const {
+  '1': 'DetailResponse',
   '2': const [
-    const {'1': 'track', '3': 1, '4': 1, '5': 11, '6': '.bragi.TrackInfo', '9': 0, '10': 'track'},
-    const {'1': 'user', '3': 2, '4': 1, '5': 11, '6': '.bragi.UserDetail', '9': 0, '10': 'user'},
-    const {'1': 'album', '3': 3, '4': 1, '5': 11, '6': '.bragi.TrackCollectionDetail', '9': 0, '10': 'album'},
-    const {'1': 'playlist', '3': 4, '4': 1, '5': 11, '6': '.bragi.TrackCollectionDetail', '9': 0, '10': 'playlist'},
+    const {'1': 'item', '3': 1, '4': 1, '5': 11, '6': '.bragi.DetailResponse.DetailItem', '10': 'item'},
+  ],
+  '3': const [DetailResponse_DetailItem$json],
+};
+
+@$core.Deprecated('Use detailResponseDescriptor instead')
+const DetailResponse_DetailItem$json = const {
+  '1': 'DetailItem',
+  '2': const [
+    const {'1': 'playlist', '3': 1, '4': 1, '5': 11, '6': '.bragi.PlaylistDetail', '9': 0, '10': 'playlist'},
   ],
   '8': const [
-    const {'1': 'Item'},
+    const {'1': 'item'},
   ],
 };
 
-/// Descriptor for `DetailReplay`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List detailReplayDescriptor = $convert.base64Decode('CgxEZXRhaWxSZXBsYXkSKAoFdHJhY2sYASABKAsyEC5icmFnaS5UcmFja0luZm9IAFIFdHJhY2sSJwoEdXNlchgCIAEoCzIRLmJyYWdpLlVzZXJEZXRhaWxIAFIEdXNlchI0CgVhbGJ1bRgDIAEoCzIcLmJyYWdpLlRyYWNrQ29sbGVjdGlvbkRldGFpbEgAUgVhbGJ1bRI6CghwbGF5bGlzdBgEIAEoCzIcLmJyYWdpLlRyYWNrQ29sbGVjdGlvbkRldGFpbEgAUghwbGF5bGlzdEIGCgRJdGVt');
+/// Descriptor for `DetailResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List detailResponseDescriptor = $convert.base64Decode('Cg5EZXRhaWxSZXNwb25zZRI0CgRpdGVtGAEgASgLMiAuYnJhZ2kuRGV0YWlsUmVzcG9uc2UuRGV0YWlsSXRlbVIEaXRlbRpJCgpEZXRhaWxJdGVtEjMKCHBsYXlsaXN0GAEgASgLMhUuYnJhZ2kuUGxheWxpc3REZXRhaWxIAFIIcGxheWxpc3RCBgoEaXRlbQ==');
 @$core.Deprecated('Use streamRequestDescriptor instead')
 const StreamRequest$json = const {
   '1': 'StreamRequest',
@@ -247,14 +251,26 @@ const StreamRequest$json = const {
 
 /// Descriptor for `StreamRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamRequestDescriptor = $convert.base64Decode('Cg1TdHJlYW1SZXF1ZXN0EisKCHByb3ZpZGVyGAEgASgOMg8uYnJhZ2kuUHJvdmlkZXJSCHByb3ZpZGVyEg4KAmlkGAIgASgJUgJpZA==');
-@$core.Deprecated('Use streamReplayDescriptor instead')
-const StreamReplay$json = const {
-  '1': 'StreamReplay',
+@$core.Deprecated('Use streamResponseDescriptor instead')
+const StreamResponse$json = const {
+  '1': 'StreamResponse',
   '2': const [
-    const {'1': 'audios', '3': 1, '4': 3, '5': 11, '6': '.bragi.Stream', '10': 'audios'},
-    const {'1': 'videos', '3': 2, '4': 3, '5': 11, '6': '.bragi.Stream', '10': 'videos'},
+    const {'1': 'streams', '3': 1, '4': 3, '5': 11, '6': '.bragi.StreamResponse.StreamItem', '10': 'streams'},
+  ],
+  '3': const [StreamResponse_StreamItem$json],
+};
+
+@$core.Deprecated('Use streamResponseDescriptor instead')
+const StreamResponse_StreamItem$json = const {
+  '1': 'StreamItem',
+  '2': const [
+    const {'1': 'audio', '3': 1, '4': 1, '5': 11, '6': '.bragi.Stream', '10': 'audio'},
+    const {'1': 'video', '3': 2, '4': 1, '5': 11, '6': '.bragi.Stream', '9': 0, '10': 'video', '17': true},
+  ],
+  '8': const [
+    const {'1': '_video'},
   ],
 };
 
-/// Descriptor for `StreamReplay`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List streamReplayDescriptor = $convert.base64Decode('CgxTdHJlYW1SZXBsYXkSJQoGYXVkaW9zGAEgAygLMg0uYnJhZ2kuU3RyZWFtUgZhdWRpb3MSJQoGdmlkZW9zGAIgAygLMg0uYnJhZ2kuU3RyZWFtUgZ2aWRlb3M=');
+/// Descriptor for `StreamResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List streamResponseDescriptor = $convert.base64Decode('Cg5TdHJlYW1SZXNwb25zZRI6CgdzdHJlYW1zGAEgAygLMiAuYnJhZ2kuU3RyZWFtUmVzcG9uc2UuU3RyZWFtSXRlbVIHc3RyZWFtcxplCgpTdHJlYW1JdGVtEiMKBWF1ZGlvGAEgASgLMg0uYnJhZ2kuU3RyZWFtUgVhdWRpbxIoCgV2aWRlbxgCIAEoCzINLmJyYWdpLlN0cmVhbUgAUgV2aWRlb4gBAUIICgZfdmlkZW8=');
