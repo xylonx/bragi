@@ -11,10 +11,10 @@ proto:
 	protoc --proto_path=proto/ --dart_out=grpc:lib/src/services/proto proto/bragi/bragi.proto
 
 l10n:
-	flutter gen-l10n
+	fvm flutter gen-l10n
 
 gen-hive:
-	flutter packages pub run build_runner build
+	fvm flutter packages pub run build_runner build
 
 run:
-	flutter run
+	fvm flutter run
