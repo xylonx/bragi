@@ -1,0 +1,21 @@
+{
+  "appTitle": "bragi",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "homePageTitle": "Home",
+  "searchPageTitle": "Search",
+  "libraryPageTitle": "Library",
+  "settingPageTitle": "Setting",
+  "ok": "Ok",
+  "cancel": "Cancel",
+  "searchText": "Songs, Artists or Playlists",
+  "greet": "Hi",
+  "madeBy": "made by xylonx",
+  "about": "about",
+  "loading": "Loading",
+  "back": "Back",
+  "playlists": "Playlists",
+  "library": "Library",
+  "add": "Add"
+}
