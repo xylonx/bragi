@@ -1,9 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:bragi/Components/animated_text.dart';
+import 'package:bragi/Components/cached_network_image_with_error.dart';
 import 'package:bragi/Components/control_button.dart';
 import 'package:bragi/Services/notifiers/progress_notifier.dart';
-import 'package:bragi/Services/page_manager.dart';
+import 'package:bragi/Services/player_manager.dart';
 import 'package:bragi/Utils/color.dart';
 import 'package:bragi/Utils/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -75,8 +76,35 @@ class _PlayerPageState extends State<PlayerPage> {
                     ),
                   ),
                   Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: constraints.maxWidth * 0.15 / 2,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const PlayerPlaylistButton(width: 25),
+                        const Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              PlayerChangeSourceButton(),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.download_rounded),
+                          onPressed: () {
+                            // TODO(xylonx): download musics
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
                     padding: EdgeInsets.only(
-                      top: constraints.maxWidth * 0.08,
+                      top: constraints.maxWidth * 0.02,
                       bottom: constraints.maxWidth * 0.04,
                     ),
                     child: AudioProgressBar(
@@ -156,12 +184,11 @@ class CurrentArtwork extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             clipBehavior: Clip.antiAlias,
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: imageUrl,
-            ),
+            child: ImageWithError(imageUri: imageUrl),
           ),
-          back: const SizedBox(),
+          back: const SizedBox(
+            child: Text("(WIP) lyrics"),
+          ),
         ),
       ),
     );
@@ -264,30 +291,6 @@ class AudioProgressBar extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class Playlist extends StatelessWidget {
-  const Playlist({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    final playerManager = GetIt.I<PlayerStateManager>();
-    return Expanded(
-      child: ValueListenableBuilder<List<String>>(
-        valueListenable: playerManager.playlistNotifier,
-        builder: (context, playlistTitles, _) {
-          return ListView.builder(
-            itemCount: playlistTitles.length,
-            itemBuilder: (context, index) {
-              return Text(
-                '${playlistTitles[index]}',
-                style: const TextStyle(color: Colors.red),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }

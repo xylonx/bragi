@@ -1,4 +1,4 @@
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart';
+import 'package:bragi/Services/bragi/model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,20 +10,22 @@ class ProviderIcons {
 
   static const IconData spotify = FontAwesomeIcons.spotify;
 
-  static const IconData netease = FontAwesomeIcons.music;
+  // static const IconData netease = FontAwesomeIcons.music;
+  static const IconData netease =
+      IconData(0xe800, fontFamily: "music_provider_icons", fontPackage: null);
 
   static IconData icons(Provider provider) {
     switch (provider) {
-      case Provider.PROVIDER_BILIBILI:
+      case Provider.bilibili:
         return ProviderIcons.bilibili;
-      case Provider.PROVIDER_NETEASE_MUSIC:
+      case Provider.netEase:
         return ProviderIcons.netease;
-      case Provider.PROVIDER_SPOTIFY:
+      case Provider.spotify:
         return ProviderIcons.spotify;
-      case Provider.PROVIDER_YOUTUBE:
+      case Provider.youtube:
         return ProviderIcons.youtube;
-      default:
-        return ProviderIcons.netease;
+      case Provider.local:
+        return Icons.folder_copy_rounded;
     }
   }
 }

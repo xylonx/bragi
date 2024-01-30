@@ -1,22 +1,26 @@
+import 'package:bragi/Components/cached_network_image_with_error.dart';
 import 'package:bragi/Components/provider_icons.dart';
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart' as bragi;
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bragi/Services/bragi/model.dart';
 import 'package:flutter/material.dart';
 
 class SearchItemTrack extends StatelessWidget {
-  final bragi.Track track;
+  final Provider provider;
+  final Song track;
 
   final double height;
 
   final void Function()? onTap;
   final void Function()? onLoadMore;
+  final void Function()? onDismiss;
 
   const SearchItemTrack({
     super.key,
-    required this.height,
+    required this.provider,
     required this.track,
+    required this.height,
     this.onTap,
     this.onLoadMore,
+    this.onDismiss,
   });
 
   @override
@@ -24,19 +28,21 @@ class SearchItemTrack extends StatelessWidget {
     return _SearchItem(
       id: track.id,
       height: height,
-      coverUrl: track.cover.url,
+      coverUrl: track.cover ?? '',
       imageBorderRadius: BorderRadius.circular(height / 6),
-      provider: track.provider,
+      provider: provider,
       title: track.name,
       subtitle: track.artists.map((e) => e.name).join(', '),
       onTap: onTap,
       onLoadMore: onLoadMore,
+      onDismiss: onDismiss,
     );
   }
 }
 
 class SearchItemPlaylist extends StatelessWidget {
-  final bragi.Playlist playlist;
+  final Provider provider;
+  final SongCollection playlist;
 
   final double height;
 
@@ -44,6 +50,7 @@ class SearchItemPlaylist extends StatelessWidget {
 
   const SearchItemPlaylist({
     super.key,
+    required this.provider,
     required this.playlist,
     required this.height,
     this.onTap,
@@ -54,9 +61,9 @@ class SearchItemPlaylist extends StatelessWidget {
     return _SearchItem(
       id: playlist.id,
       height: height,
-      coverUrl: playlist.cover.url,
+      coverUrl: playlist.cover ?? '',
       imageBorderRadius: BorderRadius.circular(height / 6),
-      provider: playlist.provider,
+      provider: provider,
       title: playlist.name,
       subtitle: playlist.artists.map((e) => e.name).join(', '),
       onTap: onTap,
@@ -67,13 +74,15 @@ class SearchItemPlaylist extends StatelessWidget {
 class SearchItemArtist extends StatelessWidget {
   final double height;
 
-  final bragi.ArtistDetail artist;
+  final Provider provider;
+  final Artist artist;
 
   final void Function()? onTap;
 
   const SearchItemArtist({
     super.key,
     required this.height,
+    required this.provider,
     required this.artist,
     this.onTap,
   });
@@ -81,13 +90,13 @@ class SearchItemArtist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _SearchItem(
-      id: artist.artist.id,
+      id: artist.id,
       height: height,
-      coverUrl: artist.avatar.url,
+      coverUrl: artist.avatar ?? '',
       imageBorderRadius: BorderRadius.circular(50),
       enableCoverIcon: true,
-      provider: artist.artist.provider,
-      title: artist.artist.name,
+      provider: provider,
+      title: artist.name,
       subtitle: '',
       // subtitle: artist.description,
       onTap: onTap,
@@ -103,12 +112,13 @@ class _SearchItem extends StatelessWidget {
   final BorderRadius imageBorderRadius;
   final bool enableCoverIcon;
 
-  final bragi.Provider provider;
+  final Provider provider;
   final String title;
   final String subtitle;
 
   final void Function()? onTap;
   final void Function()? onLoadMore;
+  final void Function()? onDismiss;
 
   const _SearchItem({
     required this.id,
@@ -121,13 +131,40 @@ class _SearchItem extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.onLoadMore,
+    this.onDismiss,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SizedBox(
-        height: height,
+    return
+        // SafeArea(
+        // child:
+
+        SizedBox(
+      height: height,
+      child: Dismissible(
+        key: Key(id),
+        background: Container(
+          color: Colors.green.shade300,
+          child: const Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.queue_music_rounded),
+              )
+            ],
+          ),
+        ),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.startToEnd) {
+            if (onDismiss != null) {
+              onDismiss!();
+            }
+          }
+          return false;
+        },
         child: InkWell(
           onTap: onTap,
           child: Row(
@@ -137,8 +174,8 @@ class _SearchItem extends StatelessWidget {
                 children: [
                   Hero(
                     tag: id,
-                    child: CachedNetworkImage(
-                      imageUrl: coverUrl,
+                    child: ImageWithError(
+                      imageUri: coverUrl,
                       imageBuilder: (context, imageProvider) => Container(
                         width: height,
                         height: height,
@@ -149,14 +186,6 @@ class _SearchItem extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                      errorWidget: (context, url, error) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/cover.jpg'),
-                      ),
-                      placeholder: (context, url) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/cover.jpg'),
                       ),
                     ),
                   ),
@@ -218,6 +247,7 @@ class _SearchItem extends StatelessWidget {
           ),
         ),
       ),
+      // ),
     );
   }
 }

@@ -15,7 +15,6 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    // double boxSize = min(MediaQuery.of(context).size.width / 2, 250);
     super.build(context);
 
     return Scaffold(
@@ -63,11 +62,6 @@ class _SearchScreenState extends State<SearchScreen>
                 ],
               ),
             ),
-            // onTap: () => Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => const SearchPage(query: ''),
-            //     )),
             onTap: () => Navigator.pushNamed(
               context,
               '/search',

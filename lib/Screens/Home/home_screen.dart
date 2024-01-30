@@ -1,39 +1,7 @@
 import 'dart:math';
 
-import 'package:bragi/Services/proto/bragi/bragi.pb.dart' as bragi;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-bragi.ArtistDetail artistDetail = bragi.ArtistDetail(
-  artist: bragi.Artist(
-    id: '1950658',
-    provider: bragi.Provider.PROVIDER_BILIBILI,
-    name: '早稻叽',
-  ),
-  avatar: bragi.Image(
-    url:
-        'https://i0.hdslb.com/bfs/face/a6a169ebc03ed22ece55926954711fb0a7903d59.jpg',
-  ),
-  description: '',
-  // description: '<ChaosLive>励志给人类带来幸福的光之恶魔✨❤微博@纯白早稻叽✨商务合作请戳：520060132（不看私信，谢）',
-);
-
-bragi.Track sampleTrack = bragi.Track(
-  id: 'BV1jK4y197Au::354056018',
-  provider: bragi.Provider.PROVIDER_BILIBILI,
-  name: '女声日语版《热爱105°C的你》最甜日语填词❤️',
-  cover: bragi.Image(
-    url:
-        'http://i1.hdslb.com/bfs/archive/98d3b1ead62a9f80eca155c43aa9aa0d8188c3ab.jpg',
-  ),
-  artists: [
-    bragi.Artist(
-      id: '1950658',
-      provider: bragi.Provider.PROVIDER_BILIBILI,
-      name: '早稻叽',
-    )
-  ],
-);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             // TODO(xylonx): change params for below components
             children: [
-              RecentPlaylist(),
+              // RecentPlaylist(),
               LastSession(recentList: []),
             ],
           ),
@@ -103,8 +71,8 @@ class AnimatedGreet extends StatelessWidget {
       toolbarHeight: 65,
       automaticallyImplyLeading: false,
       flexibleSpace: LayoutBuilder(
-        builder: (context, constraints) => GestureDetector(
-          child: Column(
+        builder: (context, constraints) => FlexibleSpaceBar(
+          background: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const SizedBox(height: 60),
@@ -211,7 +179,26 @@ class LastSession extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
+              child: Text(
+                AppLocalizations.of(context)!.lastSession,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+          // TODO(xylonx): add last session function
+        ),
+      ],
+    );
   }
 }
 

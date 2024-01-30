@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:bragi/Utils/media_converter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
 
@@ -12,6 +13,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   MyAudioHandler() {
     _loadEmptyPlaylist();
+    // _notifyCurrentIndex();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
     _listenForCurrentSongIndexChanges();
@@ -25,6 +27,13 @@ class MyAudioHandler extends BaseAudioHandler {
       Logger.root.severe('Error: $e');
     }
   }
+
+  // // TODO(xylonx): some bugs here
+  // void _notifyCurrentIndex() {
+  //   _player.currentIndexStream.listen((index) {
+  //     playbackState.add(playbackState.value.copyWith(queueIndex: index));
+  //   });
+  // }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
@@ -135,18 +144,50 @@ class MyAudioHandler extends BaseAudioHandler {
     queue.add(newQueue);
   }
 
-  UriAudioSource _createAudioSource(MediaItem mediaItem) {
-    Map<String, String>? header = null;
+  // @override
+  // Future<void> updateQueue(List<MediaItem> queue) async {
+  //   final audioSource = queue.map(_createAudioSource).toList();
+  //   await _playlist.clear();
+  //   await _playlist.addAll(audioSource);
 
-    if ((mediaItem.extras!['uri'] as String).contains('bili')) {
+  //   // _playlist``
+  //   // _playlist.addAll(children)
+  // }
+
+  // Future<void> modifySource(MediaItem mediaItem) async {
+  //   final audioSource = _createAudioSource(mediaItem);
+
+  //   // queue.value.firstWhere((element) => element.id == mediaItem.id);
+  //   // let playlist_idx =
+  //   // _playlist.children.firstWhere((element) => element._id == mediaItem.id);
+  //   // _playlist.children[_playlist.children.indexWhere((element) => element.)] = _createAudioSource(mediaItem);
+
+  //   // final idx = _playlist.indexWhere((element) => element.id = mediaItem.id)
+  // }
+
+  // @override
+  // Future<void> updateMediaItem(MediaItem mediaItem) async {
+  //   // queue.value
+
+  //   // final audioSource = _createAudioSource(mediaItem);
+  //   // await _player.setAudioSource(audioSource);
+  // }
+
+  UriAudioSource _createAudioSource(MediaItem mediaItem) {
+    Map<String, String>? header;
+
+    final uri = MediaConverter.extractUriFromMediaItem(mediaItem);
+
+    // set header for bili source stream
+    if (uri.contains('bili') || uri.contains("akam")) {
       header = {
-        'Referer': 'https://www.bilibili.com/',
+        'Referer': '.bilibili.com',
         'Origin': 'https://www.bilibili.com',
       };
     }
 
     return AudioSource.uri(
-      Uri.parse(mediaItem.extras!['uri'] as String),
+      Uri.parse(uri),
       headers: header,
       tag: mediaItem,
     );

@@ -1,6 +1,7 @@
 import 'package:bragi/Models/library.dart';
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart' as bragi;
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bragi/Models/playlist.dart';
+import 'package:bragi/Screens/Search/search_item.dart';
+import 'package:bragi/Services/bragi/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,6 +14,9 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  bool enablePlaylists = true;
+  bool enableArtists = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,17 +52,54 @@ class _LibraryScreenState extends State<LibraryScreen> {
               showDialog(
                 context: context,
                 builder: (_) => AddPlaylistDialog(
-                  onTextChanged: (s) {},
+                  onSubmit: (v) => HiveLibrary.newPlaylist(v, null, null),
                 ),
               );
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.clear_all_rounded),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.areYouSureDeleteAll),
+                actions: [
+                  TextButton(
+                    child: Text(AppLocalizations.of(context)!.confirm),
+                    onPressed: () {
+                      HiveLibrary.removeAll();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(40),
+          preferredSize: const Size.fromHeight(40),
           child: Wrap(
             spacing: 8,
-            children: [FilterChip(label: Text('Playlist'), onSelected: (s) {})],
+            children: [
+              FilterChip(
+                label: Text(AppLocalizations.of(context)!.playlists),
+                selected: true,
+                onSelected: (s) {
+                  setState(() {
+                    enablePlaylists = s;
+                  });
+                },
+              ),
+              FilterChip(
+                label: Text(AppLocalizations.of(context)!.artists),
+                selected: true,
+                onSelected: (s) {
+                  setState(() {
+                    enableArtists = s;
+                  });
+                },
+              )
+            ],
           ),
         ),
       ),
@@ -68,51 +109,44 @@ class _LibraryScreenState extends State<LibraryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Liked Artist'),
-              Text(
-                "Liked Playlist",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              ValueListenableBuilder(
-                valueListenable:
-                    Hive.box<bragi.PlaylistDetail>(HiveLibrary.playlistBox)
-                        .listenable(),
-                builder: (context, value, child) => SizedBox(
-                  height: 110,
-                  child: ListView.separated(
-                    itemCount: value.length,
-                    padding: const EdgeInsets.all(8),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => GestureDetector(
-                      child: SizedBox.square(
-                        dimension: 100,
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: value.getAt(index)?.cover.url ?? '',
-                          errorWidget: (context, url, error) => const Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/cover.jpg'),
-                          ),
-                          placeholder: (context, url) => const Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/cover.jpg'),
-                          ),
-                        ),
-                      ),
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        '/playlist',
-                        arguments: {
-                          'local': true,
-                          'id': value.getAt(index)?.id,
-                          'provider': bragi.Provider.PROVIDER_UNSPECIFIED,
-                        },
-                      ),
-                    ),
-                    separatorBuilder: (_, __) => const SizedBox(width: 22),
+              if (enablePlaylists)
+                ValueListenableBuilder(
+                  valueListenable:
+                      Hive.box<ProvidedPlaylist>(HiveLibrary.playlistBox)
+                          .listenable(),
+                  builder: (context, value, child) => Expanded(
+                    child: ListView.builder(
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          final playlist = value.getAt(index);
+                          if (playlist != null) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                                vertical: 6,
+                              ),
+                              child: SearchItemPlaylist(
+                                provider: playlist.isLocal
+                                    ? Provider.local
+                                    : playlist.provider!,
+                                playlist: playlist.toSongCollection(),
+                                height: 60,
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  "/playlist",
+                                  arguments: {
+                                    "local": playlist.isLocal,
+                                    "id": playlist.id,
+                                    "provider": playlist.provider
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                          return null;
+                        }),
                   ),
-                ),
-              )
+                )
             ],
           ),
         ),
@@ -121,19 +155,52 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 }
 
-class AddPlaylistDialog extends StatelessWidget {
-  final void Function(String) onTextChanged;
+class AddPlaylistDialog extends StatefulWidget {
+  final Function(String) onSubmit;
 
-  const AddPlaylistDialog({super.key, required this.onTextChanged});
+  const AddPlaylistDialog({super.key, required this.onSubmit});
+
+  @override
+  State<AddPlaylistDialog> createState() => _AddPlaylistDialogState();
+}
+
+class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
+  final TextEditingController _textFieldController = TextEditingController();
+
+  String? playlistName;
+
+  @override
+  void dispose() {
+    _textFieldController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add Playlist'),
+      title: Text(AppLocalizations.of(context)!.addPlaylist),
       content: TextField(
-        onChanged: onTextChanged,
+        onChanged: (v) {
+          setState(() {
+            playlistName = v;
+          });
+        },
+        controller: _textFieldController,
+        decoration: InputDecoration(
+          hintText: AppLocalizations.of(context)!.playlistName,
+        ),
       ),
-      actions: [],
+      actions: [
+        MaterialButton(
+          child: Text(AppLocalizations.of(context)!.confirm),
+          onPressed: () {
+            if (playlistName != null && playlistName!.trim().isNotEmpty) {
+              widget.onSubmit(playlistName!);
+              Navigator.pop(context);
+            }
+          },
+        )
+      ],
     );
   }
 }

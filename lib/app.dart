@@ -3,8 +3,8 @@ import 'package:bragi/Screens/Player/player.dart';
 import 'package:bragi/Screens/Playlist/playlist.dart';
 import 'package:bragi/Screens/Search/search.dart';
 import 'package:bragi/Screens/Unknown/unknown.dart';
-import 'package:bragi/Services/page_manager.dart';
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart';
+import 'package:bragi/Services/bragi/model.dart';
+import 'package:bragi/Services/player_manager.dart';
 import 'package:bragi/themes/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,15 +15,17 @@ import 'package:get_it/get_it.dart';
 /// Called when Doing Background Work initiated from Widget
 @pragma('vm:entry-point')
 Future<void> backgroundCallback(Uri? data) async {
+  final playerManager = GetIt.I<PlayerStateManager>();
+
   if (data?.host == 'controls') {
     if (data?.path == '/play') {
-      // audioHandler?.play();
+      playerManager.play();
     } else if (data?.path == '/pause') {
-      // audioHandler?.pause();
+      playerManager.pause();
     } else if (data?.path == '/skipNext') {
-      // audioHandler?.skipToNext();
+      playerManager.next();
     } else if (data?.path == '/skipPrevious') {
-      // audioHandler?.skipToPrevious();
+      playerManager.previous();
     }
   }
 }
@@ -133,11 +135,12 @@ class _MyAppState extends State<MyApp> {
                     SearchPage(query: args['query'] as String),
               );
             case '/playlist':
+              final isLocal = args['local'] as bool;
               return MaterialPageRoute(
                 builder: (context) => PlaylistPage(
-                  provider: args['provider'] as Provider,
                   id: args['id'] as String,
-                  local: args['local'] as bool,
+                  local: isLocal,
+                  provider: isLocal ? null : args['provider'] as Provider,
                 ),
               );
             default:

@@ -37,7 +37,6 @@ dependencies:
   audio_service: ^0.18.10
   flutter_displaymode: ^0.6.0
   get_it: ^7.6.0
-  grpc: ^3.2.3
   hive_flutter: ^1.1.0
   metadata_god: ^0.5.0
   flutter_localizations:
@@ -52,6 +51,9 @@ dependencies:
   flutter_typeahead: ^4.6.2
   just_audio: ^0.9.34
   palette_generator: ^0.3.3+2
+  modal_bottom_sheet: ^3.0.0-pre
+  dio: ^5.4.0
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -94,7 +96,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: "music_provider_icons"
+      fonts:
+        - asset: fonts/netease.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

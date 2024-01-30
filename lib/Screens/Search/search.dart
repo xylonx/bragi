@@ -1,12 +1,13 @@
+import 'package:bragi/Components/floating_modal.dart';
 import 'package:bragi/Components/gradient_container.dart';
 import 'package:bragi/Components/mini_player.dart';
 import 'package:bragi/Components/provider_icons.dart';
 import 'package:bragi/Models/settings.dart';
 import 'package:bragi/Screens/Search/search_item.dart';
-import 'package:bragi/Services/page_manager.dart';
-import 'package:bragi/Services/proto/bragi/bragi.pb.dart';
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart' as bragi;
-import 'package:bragi/Utils/media_converter.dart';
+import 'package:bragi/Screens/Search/search_item_modal.dart';
+import 'package:bragi/Services/bragi/client.dart';
+import 'package:bragi/Services/bragi/model.dart';
+import 'package:bragi/Services/playlist_manager.dart';
 import 'package:bragi/Utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -30,14 +31,12 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final PagingController<int, bragi.SearchResponse_SearchItem>
-      _pagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, ScrapeItem> _pagingController =
+      PagingController(firstPageKey: 1);
   bool searchSubmit = false;
 
   final TextEditingController _textEditingController = TextEditingController();
-  List<bragi.SearchResponse_SearchItem> searchResult = [];
-
-  final List<String> searchHistory = HiveSettings.searchHistory;
+  List<ScrapeItem> searchResult = [];
 
   @override
   void initState() {
@@ -55,111 +54,77 @@ class _SearchPageState extends State<SearchPage> {
     _pagingController.dispose();
   }
 
-  Future<List<bragi.SuggestResponse_Suggestion>> handleTextChange(
+  Future<List<WithProvider<String>>> handleTextChange(
     String query,
   ) async {
-    final bragi.BragiServiceClient client = GetIt.I<bragi.BragiServiceClient>();
-    return (await client.suggest(
-      bragi.SuggestRequest(
-        providers: [bragi.Provider.PROVIDER_BILIBILI],
-        keyword: query,
-      ),
-    ))
-        .suggestions;
+    final client = GetIt.I<BragiApiClient>();
+    return await client.suggest(query);
   }
 
-  Future<List<bragi.Stream>> handleLoadStream(
-    bragi.Provider provider,
-    String id,
-  ) async {
-    final bragi.BragiServiceClient client = GetIt.I<bragi.BragiServiceClient>();
-    return (await client.stream(StreamRequest(provider: provider, id: id)))
-        .streams
-        .where((element) => element.hasAudio())
-        .map((e) => e.ensureAudio())
-        .toList();
-  }
-
-  // FIXME(xylonx): the infinite_scroll_pagination will fetch tons of pages. May be some layout error.
   Future<void> search(String query, int page) async {
     Logger.root.info('submit query $query');
 
-    final bragi.BragiServiceClient client = GetIt.I<bragi.BragiServiceClient>();
-    final resp = await client.search(
-      bragi.SearchRequest(
-        providers: [bragi.Provider.PROVIDER_BILIBILI],
-        keyword: query,
-        page: page,
-        fields: [
-          bragi.Zone.ZONE_ARTIST,
-          bragi.Zone.ZONE_PLAYLIST,
-          bragi.Zone.ZONE_TRACK,
-        ],
-      ),
-    );
+    HiveSettings.updateSearchHistory(query);
 
-    if (page == 1) {
-      resp.items.insert(0, SearchResponse_SearchItem());
-    }
+    final client = GetIt.I<BragiApiClient>();
+    final searchItems = await client.search(query, SearchType.all);
 
-    if (page >= 1) {
-      _pagingController.appendLastPage(resp.items);
-    } else {
-      _pagingController.appendPage(resp.items, page + 1);
-    }
+    _pagingController.appendLastPage(searchItems);
   }
 
   Widget searchItemBuilder(
     BuildContext context,
-    bragi.SearchResponse_SearchItem item,
-    int index,
+    ScrapeItem item,
   ) {
-    switch (item.whichItem()) {
-      case bragi.SearchResponse_SearchItem_Item.track:
-        final track = item.ensureTrack();
-        return SearchItemTrack(
-          height: 60,
-          track: track,
-          onTap: () async {
-            final playerManager = GetIt.I<PlayerStateManager>();
-            final streams = await handleLoadStream(track.provider, track.id);
-            // FIXME(xylonx): should convert it to play now
-            // playerManager
-            playerManager.insertFirst(
-              MediaConverter.track2MediaItem(track, streams),
-            );
-            Navigator.pushNamed(context, '/player');
-          },
-          onLoadMore: () {
-            Snackbar.show(
-              context,
-              'load more for track ${item.ensureTrack().name}',
-            );
-          },
-        );
-      case bragi.SearchResponse_SearchItem_Item.user:
-        return SearchItemArtist(
-          height: 60,
-          artist: item.ensureUser(),
-          onTap: () {
-            Snackbar.show(context, 'Artist detail is not supported now');
-          },
-        );
-      case bragi.SearchResponse_SearchItem_Item.playlist:
-        return SearchItemPlaylist(
-          playlist: item.ensurePlaylist(),
-          height: 60,
-          onTap: () => Navigator.pushNamed(
-            context,
-            '/playlist',
-            arguments: {
-              'id': item.ensurePlaylist().id,
-              'provider': item.ensurePlaylist().provider,
-            },
+    final provider = item.provider;
+
+    if (item.data is Song) {
+      final song = item.data as Song;
+      return SearchItemTrack(
+        height: 60,
+        provider: provider,
+        track: song,
+        onTap: () {
+          replaceWithSong(provider, song);
+          Navigator.pushNamed(context, '/player');
+        },
+        onDismiss: () => addToQueue(provider, song),
+        onLoadMore: () => showFloatingModalBottomSheet(
+          context: context,
+          builder: (context) => SearchItemModal(
+            provider: provider,
+            track: song,
           ),
-        );
-      default:
-        return const SizedBox(height: 60);
+        ),
+      );
+    } else if (item.data is Artist) {
+      final artist = item.data as Artist;
+      return SearchItemArtist(
+        height: 60,
+        provider: provider,
+        artist: artist,
+        onTap: () {
+          Snackbar.show(context, 'Artist detail is not supported now');
+        },
+      );
+    } else if (item.data is SongCollection) {
+      final collection = item.data as SongCollection;
+      return SearchItemPlaylist(
+        provider: provider,
+        playlist: collection,
+        height: 60,
+        onTap: () => Navigator.pushNamed(
+          context,
+          '/playlist',
+          arguments: {
+            'id': collection.id,
+            'provider': provider,
+            'local': false,
+          },
+        ),
+      );
+    } else {
+      return const SizedBox(height: 60);
     }
   }
 
@@ -176,7 +141,7 @@ class _SearchPageState extends State<SearchPage> {
                 body: Stack(
                   children: [
                     if (searchSubmit)
-                      PagedListView<int, bragi.SearchResponse_SearchItem>(
+                      PagedListView<int, ScrapeItem>(
                         pagingController: _pagingController,
                         builderDelegate: PagedChildBuilderDelegate(
                           itemBuilder: (context, item, index) => Padding(
@@ -184,22 +149,24 @@ class _SearchPageState extends State<SearchPage> {
                               horizontal: 18,
                               vertical: 6,
                             ),
-                            child: searchItemBuilder(context, item, index),
+                            child: searchItemBuilder(context, item),
                           ),
                         ),
                       ),
 
-                    // TODO(xylonx): there are some bugs here
-                    SearchHistory(
-                      onTap: (query) async {
-                        _pagingController.refresh();
-                        setState(() {
-                          searchSubmit = true;
-                          searchHistory.insert(0, query);
-                        });
-                        _textEditingController.text = query;
-                      },
-                    ),
+                    if (!searchSubmit)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: SearchHistory(
+                          onTap: (query) async {
+                            _pagingController.refresh();
+                            setState(() {
+                              searchSubmit = true;
+                            });
+                            _textEditingController.text = query;
+                          },
+                        ),
+                      ),
 
                     // search bar
                     Container(
@@ -252,7 +219,10 @@ class _SearchPageState extends State<SearchPage> {
                                   ProviderIcons.icons(itemData.provider),
                                 ),
                               ),
-                              Text(itemData.suggestion),
+                              Text(
+                                itemData.data,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ],
                           ),
                         ),
@@ -260,9 +230,8 @@ class _SearchPageState extends State<SearchPage> {
                           _pagingController.refresh();
                           setState(() {
                             searchSubmit = true;
-                            searchHistory.insert(0, suggestion.suggestion);
                           });
-                          _textEditingController.text = suggestion.suggestion;
+                          _textEditingController.text = suggestion.data;
                         },
                       ),
                     )
@@ -313,17 +282,16 @@ class _SearchHistoryState extends State<SearchHistory> {
                       ),
                       onDeleted: () {
                         setState(() {
-                          searchHistory.removeAt(index);
-                          HiveSettings.searchHistory = searchHistory;
+                          final query = searchHistory.removeAt(index).trim();
+                          HiveSettings.deleteHistory(query);
                         });
                       },
                     ),
                     onTap: () async {
                       setState(() {
-                        final String query =
-                            searchHistory.removeAt(index).trim();
+                        final query = searchHistory.removeAt(index).trim();
                         searchHistory.insert(0, query);
-                        HiveSettings.searchHistory = searchHistory;
+                        HiveSettings.updateSearchHistory(query);
                       });
                       await widget.onTap(searchHistory[0]);
                     },

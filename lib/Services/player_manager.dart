@@ -8,10 +8,11 @@ import 'package:logging/logging.dart';
 
 class PlayerStateManager {
   // Listeners: Updates going to the UI
-  // final currentSongTitleNotifier = ValueNotifier<String>('');
   final currentMediaItemNotifier = ValueNotifier<MediaItem?>(null);
 
-  final playlistNotifier = ValueNotifier<List<String>>([]);
+  final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
+  final playlistCurrentIndexNotifier = ValueNotifier<int?>(null);
+
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
   final isFirstSongNotifier = ValueNotifier<bool>(true);
@@ -47,6 +48,8 @@ class PlayerStateManager {
 
   void next() => _audioHandler.skipToNext();
 
+  void skipToQueueItem(int index) => _audioHandler.skipToQueueItem(index);
+
   void repeat() {
     repeatButtonNotifier.nextState();
     final repeatMode = repeatButtonNotifier.value;
@@ -73,38 +76,53 @@ class PlayerStateManager {
     }
   }
 
-  void add(MediaItem mediaItem) {
-    // final songRepository = getIt<PlaylistRepository>();
-    // final song = await songRepository.fetchAnotherSong();
-    // final mediaItem = MediaItem(
-    //   id: song['id'] ?? '',
-    //   album: song['album'] ?? '',
-    //   title: song['title'] ?? '',
-    //   extras: {'url': song['url']},
-    // );
+  Future<void> add(MediaItem mediaItem) async {
     Logger.root.info('player manager add media item: $mediaItem');
-    _audioHandler.addQueueItem(mediaItem);
+    await _audioHandler.addQueueItem(mediaItem);
   }
 
-  void insertFirst(MediaItem mediaItem) {
-    _insert(0, mediaItem);
-    _audioHandler.skipToQueueItem(0);
+  Future<void> addAll(List<MediaItem> mediaItems) async {
+    Logger.root.info('player manager add media item: $mediaItems');
+    await _audioHandler.addQueueItems(mediaItems);
   }
 
-  void insertNext(MediaItem mediaItem) {
-    // _audioHandler.insertQueueItem(index, mediaItem)
+  Future<void> replaceWith(MediaItem mediaItem) async {
+    while (_audioHandler.queue.value.isNotEmpty) {
+      await remove();
+    }
+    await add(mediaItem);
+    await _audioHandler.play();
   }
 
-  void _insert(int index, MediaItem mediaItem) {
+  Future<void> replaceAllWith(List<MediaItem> mediaItems) async {
+    while (_audioHandler.queue.value.isNotEmpty) {
+      await remove();
+    }
+    await addAll(mediaItems);
+    await _audioHandler.play();
+  }
+
+  Future<void> insertNext(MediaItem mediaItem) async {
+    final idx = playlistCurrentIndexNotifier.value;
+    if (idx != null) await _insert(idx + 1, mediaItem);
+  }
+
+  Future<void> _insert(int index, MediaItem mediaItem) async {
     Logger.root
         .info('player manager add media item to index $index: $mediaItem');
-    _audioHandler.insertQueueItem(index, mediaItem);
+    await _audioHandler.insertQueueItem(index, mediaItem);
   }
 
-  void remove() {
+  Future<void> remove() async {
     final lastIndex = _audioHandler.queue.value.length - 1;
     if (lastIndex < 0) return;
-    _audioHandler.removeQueueItemAt(lastIndex);
+    await _audioHandler.removeQueueItemAt(lastIndex);
+  }
+
+  Future<void> removeAt(int index) async {
+    final lastIndex = _audioHandler.queue.value.length - 1;
+    if (lastIndex < 0 || index > lastIndex) return;
+    await _audioHandler.removeQueueItemAt(index);
   }
 
   void dispose() {
@@ -115,6 +133,18 @@ class PlayerStateManager {
     _audioHandler.stop();
   }
 
+  Future<void> updateMediaSource(MediaItem mediaItem) async {
+    final idx = playlistCurrentIndexNotifier.value;
+
+    if (idx != null) {
+      _audioHandler.queue.value[idx] = mediaItem;
+      _audioHandler.skipToQueueItem(idx);
+      // await insertNext(mediaItem);
+      // await _audioHandler.skipToNext();
+      // await removeAt(idx);
+    }
+  }
+
   void _listenToChangesInPlaylist() {
     _audioHandler.queue.listen((playlist) {
       if (playlist.isEmpty) {
@@ -122,8 +152,8 @@ class PlayerStateManager {
         // currentSongTitleNotifier.value = '';
         currentMediaItemNotifier.value = null;
       } else {
-        final newList = playlist.map((item) => item.title).toList();
-        playlistNotifier.value = newList;
+        // final newList = playlist.map((item) => item.title).toList();
+        playlistNotifier.value = playlist;
       }
       _updateSkipButtons();
     });
@@ -144,6 +174,8 @@ class PlayerStateManager {
         _audioHandler.seek(Duration.zero);
         _audioHandler.pause();
       }
+
+      playlistCurrentIndexNotifier.value = playbackState.queueIndex;
     });
   }
 
@@ -182,7 +214,6 @@ class PlayerStateManager {
 
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      // currentSongTitleNotifier.value = mediaItem?.title ?? '';
       currentMediaItemNotifier.value = mediaItem;
       _updateSkipButtons();
     });

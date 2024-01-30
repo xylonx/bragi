@@ -1,89 +1,146 @@
-import 'package:bragi/Services/proto/bragi/bragi.pbgrpc.dart';
-import 'package:hive/hive.dart';
+import 'package:bragi/Services/bragi/model.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class PlaylistDetailAdapter extends TypeAdapter<PlaylistDetail> {
+class ProvidedSong {
+  Provider provider;
+  Song song;
+
+  ProvidedSong({
+    required this.provider,
+    required this.song,
+  });
+
+  factory ProvidedSong.fromSong(Provider provider, Song song) {
+    return ProvidedSong(provider: provider, song: song);
+  }
+
+  factory ProvidedSong.fromJson(Map<String, dynamic> json) {
+    final provider = ProviderExtension.fromValue(json["provider"]);
+    final song = Song.fromJson(json["data"]);
+
+    return ProvidedSong(provider: provider, song: song);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "provider": provider.value,
+      "data": song.toJson(),
+    };
+  }
+}
+
+class ProvidedPlaylist {
+  String id;
+
+  bool isLocal;
+  Provider? provider; // if isLocal, then no provider
+
+  String name;
+  List<Artist> artists;
+  String? cover;
+  String? description;
+  List<ProvidedSong> songs;
+
+  ProvidedPlaylist({
+    required this.id,
+    required this.isLocal,
+    this.provider,
+    required this.name,
+    required this.artists,
+    this.cover,
+    this.description,
+    required this.songs,
+  });
+
+  factory ProvidedPlaylist.fromSongCollection(
+      Provider provider, SongCollection collection) {
+    return ProvidedPlaylist(
+      id: collection.id,
+      provider: provider,
+      isLocal: false,
+      name: collection.name,
+      artists: collection.artists,
+      cover: collection.cover,
+      description: collection.description,
+      songs: collection.songs
+          .map((e) => ProvidedSong.fromSong(provider, e))
+          .toList(),
+    );
+  }
+
+  SongCollection toSongCollection() {
+    return SongCollection(
+      id: id,
+      name: name,
+      artists: artists,
+      cover: cover,
+      description: description,
+      songs: songs.map((e) => e.song).toList(),
+    );
+  }
+
+  factory ProvidedPlaylist.forkSongCollection(
+      Provider provider, SongCollection collection) {
+    return ProvidedPlaylist(
+      id: collection.id,
+      isLocal: true,
+      name: collection.name,
+      artists: collection.artists,
+      songs: collection.songs
+          .map((e) => ProvidedSong.fromSong(provider, e))
+          .toList(),
+    );
+  }
+
+  factory ProvidedPlaylist.fromJson(Map<String, dynamic> json) {
+    final data = Map<String, dynamic>.from(json['data'] ?? {});
+    Provider? provider;
+    if (data['isLocal'] == false) {
+      provider = ProviderExtension.fromValue(json["provider"]);
+    }
+
+    return ProvidedPlaylist(
+      id: data["id"],
+      isLocal: data["isLocal"],
+      provider: provider,
+      name: data['name'],
+      artists: List<Artist>.from(
+          (json['artists'] ?? []).map((artist) => Artist.fromJson(artist))),
+      cover: json['cover'],
+      description: json['description'],
+      songs: List<ProvidedSong>.from(
+          (json['songs'] ?? []).map((song) => Song.fromJson(song))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "provider": provider?.value,
+      "data": {
+        'id': id,
+        "isLocal": isLocal,
+        'name': name,
+        'artists': artists.map((artist) => artist.toJson()).toList(),
+        'cover': cover,
+        'description': description,
+        'songs': songs.map((song) => song.toJson()).toList(),
+      }
+    };
+  }
+}
+
+class ProvidedPlaylistAdapter extends TypeAdapter<ProvidedPlaylist> {
   @override
   int get typeId => 1;
 
   @override
-  PlaylistDetail read(BinaryReader reader) {
-    return PlaylistDetail.fromJson(reader.readString());
+  ProvidedPlaylist read(BinaryReader reader) {
+    return ProvidedPlaylist.fromJson(
+        Map<String, dynamic>.from(reader.readMap()));
   }
 
   @override
-  void write(BinaryWriter writer, PlaylistDetail obj) {
-    writer.writeString(obj.writeToJson());
-  }
-}
-
-class TrackAdapter extends TypeAdapter<Track> {
-  @override
-  int get typeId => 2;
-
-  @override
-  Track read(BinaryReader reader) {
-    return Track.fromJson(reader.readString());
-  }
-
-  @override
-  void write(BinaryWriter writer, Track obj) {
-    writer.writeString(obj.writeToJson());
+  void write(BinaryWriter writer, ProvidedPlaylist obj) {
+    writer.writeMap(obj.toJson());
   }
 }
-
-PlaylistDetail defaultPlaylistDetail = PlaylistDetail(
-  id: 'PLtrsXT0Azk1lh-F9RxHOlPBhpUcn-x96X',
-  provider: Provider.PROVIDER_YOUTUBE,
-  name: '早稻叽',
-  cover: Image(
-    url: 'https://invidious.esmailelbob.xyz/vi/WSQQnwy0uW4/maxresdefault.jpg',
-  ),
-  description: '',
-  artists: [
-    ArtistDetail(
-      artist: Artist(
-        id: 'UC1Gc0YMzVQw1rqd2nLlnX5w',
-        provider: Provider.PROVIDER_YOUTUBE,
-        name: '呆呆獸',
-      ),
-      avatar: Image(
-        url:
-            'https://yt3.ggpht.com/ezrdXlD4FBhBB1oN8TRdMv8iEciN1czl7Jz73Qv6_XSLhKwJr1rqkZQVrSy6_ljleQYGGIXM9g=s48-c-k-c0x00ffffff-no-rj',
-      ),
-    ),
-  ],
-  tracks: [
-    Track(
-      id: 'WSQQnwy0uW4',
-      provider: Provider.PROVIDER_YOUTUBE,
-      name: '【早稻叽】全网最甜日语版《爱你》连rap也甜到❤️里',
-      cover: Image(
-        url:
-            'https://invidious.esmailelbob.xyz/vi/WSQQnwy0uW4/maxresdefault.jpg',
-      ),
-      artists: [
-        Artist(
-          id: 'UCoOR_eK6ZXKRtHw7r0IyEeQ',
-          name: '王戈wg',
-          provider: Provider.PROVIDER_YOUTUBE,
-        ),
-      ],
-    ),
-    Track(
-      id: 'Do7fppGiAzQ',
-      provider: Provider.PROVIDER_YOUTUBE,
-      name: 'アスノヨゾラ哨戒班/早稻叽',
-      cover: Image(
-        url:
-            'https://invidious.esmailelbob.xyz/vi/Do7fppGiAzQ/maxresdefault.jpg',
-      ),
-      artists: [
-        Artist(
-          id: 'UCk6oj-RyB58nbdOGs27SpdA',
-          name: '拉拉',
-          provider: Provider.PROVIDER_YOUTUBE,
-        ),
-      ],
-    ),
-  ],
-);

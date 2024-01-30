@@ -1,6 +1,7 @@
 import 'package:bragi/Components/animated_text.dart';
+import 'package:bragi/Components/cached_network_image_with_error.dart';
 import 'package:bragi/Components/control_button.dart';
-import 'package:bragi/Services/page_manager.dart';
+import 'package:bragi/Services/player_manager.dart';
 import 'package:bragi/Utils/color.dart';
 import 'package:bragi/Utils/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -51,6 +52,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.startToEnd) {
                 playerManager.previous();
+              } else if (direction == DismissDirection.down) {
+                playerManager.stop();
               } else {
                 playerManager.next();
               }
@@ -75,17 +78,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
                           tag: value?.id ?? '',
                           child: Card(
                             clipBehavior: Clip.antiAlias,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: value?.artUri.toString() ?? '',
-                              errorWidget: (context, url, error) => const Image(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/cover.jpg'),
-                              ),
-                              placeholder: (context, url) => const Image(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/cover.jpg'),
-                              ),
+                            child: ImageWithError(
+                              imageUri: value?.artUri.toString() ?? '',
                             ),
                           ),
                         ),
